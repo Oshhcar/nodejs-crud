@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Tickets</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body class="container" style="margin-top: 50px;">
+
+    <nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#" routerLink="/inicio">
+            <img src="/images/favicon-32x32.png" width="32" height="32" alt="">
+            Tickets
+        </a>
+
+        <!-- Navbar -->
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto mr-md-0">
+                <li class="dropdown no-arrow">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <fa name="user-circle" fixed="true"></fa>
+                        Oscar Morales
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" href="#" routerLink="/">
+                            <fa name="user" fixed="true"></fa>
+                            Perfil
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                            <fa name="sign-out" fixed="true"></fa>
+                            Cerrar sesión
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cerrar Sesión</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Selecciona "Salir" si quieres cerrar sesión.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="button" data-dismiss="modal"
+                        (click)="onLogout()">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-pills w-100">
+                <li class="nav-pill active">
+                    <a class="btn btn-success edit" href="#" data-toggle="modal" data-target="#consultaModal">
+                        Realizar Consulta
+                    </a>
+                </li>
+                <li class="nav-pill ml-auto">
+                    <h1 class="h2">Tickets</h1>
+                </li>
+                <li class="nav-pill ml-auto">
+                    <a class="nav-link active" href="#" data-toggle="modal" data-target="#addTicketModal">Agregar
+                        Ticket</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <% if (messages.success) { %>
+            <div class="alert alert-success" role="alert"><%- messages.success %></div>
+            <% } %>
+
+            <% if (messages.error) { %>
+            <div class="alert alert-danger" role="alert"><%- messages.error %></div>
+            <% } %>
+
+            <% if(data.length) { %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Título</th>
+                        <th width="200px">Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i< data.length; i++) { %>
+                    <tr>
+                        <th scope="row"><%= data[i].id%> %></th>
+                        <td><%= data[i].fecha%></td>
+                        <td><%= data[i].correo%></td>
+                        <td><%= data[i].titulo%></td>
+                        <td><%= data[i].descripcion%></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+            <% } %>
+
+            <!-- if result is empty -->
+            <% if(!data.length) { %>
+            <p class="text-center">No Tickets found!</p>
+            <% } %>
+
+        </div>
+    </div>
+
+    <!-- Consulta Modal-->
+    <div class="modal fade" id="consultaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Realizar Consulta</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/tickets" method="post">
+                        <div class="form-group">
+                            <label>Fecha inicial:</label>
+                            <input type="text" class="form-control" name="fechaI" value="<%= fechaI %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha final:</label>
+                            <input type="text" class="form-control" name="fechaF" value="<%= fechaF %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuario:</label>
+                            <input type="text" class="form-control" name="usuario" value="<%= usuario %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-info" value="Buscar" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Ticket Modal-->
+    <div class="modal fade" id="addTicketModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar Ticket</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/tickets/add" method="post">
+                        <div class="form-group">
+                            <label>Id:</label>
+                            <input type="text" class="form-control" name="id" value="<%= id %>" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha:</label>
+                            <input type="text" class="form-control" name="fecha" value="<%= fecha %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Correo:</label>
+                            <input type="text" class="form-control" name="correo" value="<%= correo %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Título:</label>
+                            <input type="text" class="form-control" name="titulo" value="<%= titulo %>"
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción:</label>
+                            <textarea rows="3" type="text" class="form-control" name="descripcion"
+                                value="<%= descripcion %>" autocomplete="off"> </textarea>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+
+                            <input type="submit" class="btn btn-primary" value="Agregar" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/js/jquery-slim.min.js"><\/script>')</script>
+    <script src="/js/umd/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</body>
+
+</html>
